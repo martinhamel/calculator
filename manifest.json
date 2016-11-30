@@ -1,0 +1,7 @@
+{
+  "name": "calculator",
+  "short_name": "calculator",
+  "description": "Test app for SweetIQ",
+  "start_url": "/",
+  "display": "standalone"
+}
