@@ -87,10 +87,10 @@
       calculate_answer: function(entry){
         //we do multiplications
         let parenthesis = /\(([^()]*?)\)/;
-        let multiplication =  /(\d+)\*(\d+)/;
-        let division =  /(\d+)\/(\d+)/;
-        let addition =  /(\d+)\+(\d+)/;
-        let substraction =  /(\d+)\-(\d+)/;
+        let multiplication =  /([\d|\.]+)\*([\d|\.]+)/;
+        let division =  /([\d|\.]+)\/([\d|\.]+)/;
+        let addition =  /([\d|\.]+)\+([\d|\.]+)/;
+        let substraction =  /([\d|\.]+)\-([\d|\.]+)/;
 
         let m = entry.match(parenthesis);
         while(m){
