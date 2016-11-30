@@ -6,8 +6,8 @@
 
     <title>calculator-app test</title>
 
-    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../../../web-component-tester/browser.js"></script>
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
 
     <link rel="import" href="../../src/calculator-app/calculator-app.html">
   </head>
@@ -20,10 +20,37 @@
 
     <script>
       suite('calculator-app', function() {
-        test('instantiating the element works', function() {
-          var element = fixture('basic');
-          assert.equal(element.is, 'calculator-app');
+        var calculator;
+
+        setup(function(){
+          calculator = fixture('basic');
         });
+
+        test('1+1', function(){
+          assert.equal(2, calculator.calculate_answer('1+1'));
+        });
+
+        test('1-1', function(){
+          assert.equal(0, calculator.calculate_answer('1-1'));
+        });
+
+        test('2*3', function(){
+          assert.equal(6, calculator.calculate_answer('2*3'));
+        });
+
+        test('2+3*4', function(){
+          assert.equal(14, calculator.calculate_answer('2+3*4'));
+        });
+
+        test('10/2', function(){
+          assert.equal(5, calculator.calculate_answer('10/2'));
+        });
+
+        test('(2+3)*4', function(){
+          assert.equal(20, calculator.calculate_answer('(2+3)*4'));
+        });
+
+
       });
     </script>
   </body>
