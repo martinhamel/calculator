@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
 <dom-module id="calculator-app">
   <template>
@@ -6,8 +7,41 @@
       :host {
         display: block;
       }
+
+      .numbers{
+        width: 300px;
+        border: solid black;
+      }
+
+      .numbers paper-button{
+        height: 80px;
+      }
     </style>
-    <h2>Hello [[prop1]]</h2>
+
+    {{entry}}
+    <br>
+    {{calculate_answer(entry)}}
+    <div class="numbers">
+      <paper-button on-tap='tap_number'>1</paper-button>
+      <paper-button on-tap='tap_number'>2</paper-button>
+      <paper-button on-tap='tap_number'>3</paper-button>
+      <paper-button on-tap='tap_number'>4</paper-button>
+      <paper-button on-tap='tap_number'>5</paper-button>
+      <paper-button on-tap='tap_number'>6</paper-button>
+      <paper-button on-tap='tap_number'>7</paper-button>
+      <paper-button on-tap='tap_number'>8</paper-button>
+      <paper-button on-tap='tap_number'>9</paper-button>
+      <paper-button on-tap='tap_number'>0</paper-button>
+      <paper-button on-tap='tap_number'>,</paper-button>
+      <paper-button on-tap='tap_number'>=</paper-button>
+    </div>
+    <div class="operations">
+      <paper-button on-tap='tap_delete'>del</paper-button>
+      <paper-button on-tap='tap_number'>+</paper-button>
+      <paper-button on-tap='tap_number'>-</paper-button>
+      <paper-button on-tap='tap_number'>*</paper-button>
+      <paper-button on-tap='tap_number'>/</paper-button>
+    </div>
   </template>
 
   <script>
@@ -16,11 +50,24 @@
       is: 'calculator-app',
 
       properties: {
-        prop1: {
+        entry: {
           type: String,
-          value: 'calculator-app',
-        },
+          value: ''
+        }
       },
+
+      tap_number: function(event){
+      let button = Polymer.dom(event).rootTarget.textContent.trim();
+        this.entry = String(this.entry) + String(button);
+      },
+
+      tap_delete: function(event){
+        this.entry = /(.*)(.+)/g.exec(this.entry)[1];
+      },
+
+      calculate_answer: function(entry){
+        return eval(entry);
+      }
 
     });
   </script>
