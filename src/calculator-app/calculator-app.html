@@ -1,47 +1,98 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
 <dom-module id="calculator-app">
   <template>
     <style>
       :host {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      paper-card{
         display: block;
+        width: 470px;
+      }
+
+      .entry{
+        margin: 0 10px;
+        height: 30px;
+        font-weight: bold;
+        font-size: 30px;
+        display: flex;
+        flex-direction: row-reverse;
+      }
+
+      .answer{
+        margin: 0 10px;
+        display: flex;
+        flex-direction: row-reverse;
+        height: 20px;
+      }
+
+      .buttons{
+        display: flex;
+        flex-direction: row;
+        background-color: #444;
+        color: white;
+        font-size: 20px;
       }
 
       .numbers{
-        width: 300px;
-        border: solid black;
+
       }
 
-      .numbers paper-button{
+      .operations{
+        display: flex;
+        background-color: #717070;
+        flex-direction: column;
+      }
+
+      paper-button{
         height: 80px;
+      }
+
+      .operations paper-button{
+        height: 50px;
       }
     </style>
 
-    {{entry}}
-    <br>
-    {{calculate_answer(entry)}}
-    <div class="numbers">
-      <paper-button on-tap='_event_tap_number'>1</paper-button>
-      <paper-button on-tap='_event_tap_number'>2</paper-button>
-      <paper-button on-tap='_event_tap_number'>3</paper-button>
-      <paper-button on-tap='_event_tap_number'>4</paper-button>
-      <paper-button on-tap='_event_tap_number'>5</paper-button>
-      <paper-button on-tap='_event_tap_number'>6</paper-button>
-      <paper-button on-tap='_event_tap_number'>7</paper-button>
-      <paper-button on-tap='_event_tap_number'>8</paper-button>
-      <paper-button on-tap='_event_tap_number'>9</paper-button>
-      <paper-button on-tap='_event_tap_number'>0</paper-button>
-      <paper-button on-tap='_event_tap_number'>.</paper-button>
-      <paper-button on-tap='_event_tap_number'>=</paper-button>
-    </div>
-    <div class="operations">
-      <paper-button on-tap='tap_delete'>del</paper-button>
-      <paper-button on-tap='_event_tap_number'>+</paper-button>
-      <paper-button on-tap='_event_tap_number'>-</paper-button>
-      <paper-button on-tap='_event_tap_number'>*</paper-button>
-      <paper-button on-tap='_event_tap_number'>/</paper-button>
-    </div>
+    <paper-card>
+      <div class="entry">
+        {{entry}}
+      </div>
+      <div class="answer">
+        {{calculate_answer(entry)}}
+      </div>
+      <div class="buttons">
+        <div class="numbers">
+          <paper-button on-tap='_event_tap_number'>1</paper-button>
+          <paper-button on-tap='_event_tap_number'>2</paper-button>
+          <paper-button on-tap='_event_tap_number'>3</paper-button>
+          <paper-button on-tap='_event_tap_number'>4</paper-button>
+          <paper-button on-tap='_event_tap_number'>5</paper-button>
+          <paper-button on-tap='_event_tap_number'>6</paper-button>
+          <paper-button on-tap='_event_tap_number'>7</paper-button>
+          <paper-button on-tap='_event_tap_number'>8</paper-button>
+          <paper-button on-tap='_event_tap_number'>9</paper-button>
+          <paper-button on-tap='_event_tap_number'>0</paper-button>
+          <paper-button on-tap='_event_tap_number'>.</paper-button>
+          <paper-button id='equal' on-tap='tap_equals'>=</paper-button>
+        </div>
+        <div class="operations">
+          <paper-button on-tap='tap_delete'>del</paper-button>
+          <paper-button on-tap='_event_tap_number'>+</paper-button>
+          <paper-button on-tap='_event_tap_number'>-</paper-button>
+          <paper-button on-tap='_event_tap_number'>*</paper-button>
+          <paper-button on-tap='_event_tap_number'>/</paper-button>
+          <paper-button on-tap='_event_tap_number'>(</paper-button>
+          <paper-button on-tap='_event_tap_number'>)</paper-button>
+        </div>
+      </div>
+    </paper-card>
   </template>
 
   <script>
@@ -64,12 +115,15 @@
         'keydown': '_keydown'
       },
 
+      ready: function() {
+        this.$.equal.focus();
+      },
+
       _keydown: function(event){
         if(event.key.match(/[1-9|\*|\/|\+|\-|\.]/))
           this.tap_number(event.key);
         else if(event.key === "Backspace")
           this.tap_delete();
-        console.log(event);
       },
 
       _event_tap_number: function(event){
@@ -78,6 +132,10 @@
 
       tap_number: function(number){
         this.entry = String(this.entry) + String(number);
+      },
+
+      tap_equals: function(){
+        this.entry = this.calculate_answer(this.entry);
       },
 
       tap_delete: function(event){
@@ -122,7 +180,7 @@
           m = entry.match(substraction);
         }
 
-        return entry;
+        return entry != this.entry ? entry : '';
       }
 
     });
