@@ -10,6 +10,7 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
+        background-color: #f3f3ea;
       }
 
       paper-card{
@@ -41,10 +42,6 @@
         font-size: 20px;
       }
 
-      .numbers{
-
-      }
-
       .operations{
         display: flex;
         background-color: #717070;
@@ -61,7 +58,7 @@
     </style>
 
     <paper-card>
-      <div class="entry">
+      <div id='entry' class="entry">
         {{entry}}
       </div>
       <div class="answer">
@@ -78,8 +75,8 @@
           <paper-button on-tap='_event_tap_number'>7</paper-button>
           <paper-button on-tap='_event_tap_number'>8</paper-button>
           <paper-button on-tap='_event_tap_number'>9</paper-button>
-          <paper-button on-tap='_event_tap_number'>0</paper-button>
           <paper-button on-tap='_event_tap_number'>.</paper-button>
+          <paper-button on-tap='_event_tap_number'>0</paper-button>
           <paper-button id='equal' on-tap='tap_equals'>=</paper-button>
         </div>
         <div class="operations">
@@ -93,6 +90,7 @@
         </div>
       </div>
     </paper-card>
+    <a id='focus' href="#"></a>
   </template>
 
   <script>
@@ -116,14 +114,19 @@
       },
 
       ready: function() {
-        this.$.equal.focus();
+        this.$.focus.focus();
       },
 
       _keydown: function(event){
-        if(event.key.match(/[1-9|\*|\/|\+|\-|\.]/))
+        if(event.key.match(/[1-9|\*|\/|\+|\-|\.|\(.|\.)]/))
           this.tap_number(event.key);
         else if(event.key === "Backspace")
           this.tap_delete();
+        else if(event.key === "Enter"){
+          this.tap_equals();
+        }
+        //the focus is set there to avoid entering keys when pressing enter
+        this.$.focus.focus();
       },
 
       _event_tap_number: function(event){
@@ -135,7 +138,9 @@
       },
 
       tap_equals: function(){
-        this.entry = this.calculate_answer(this.entry);
+        let answer = this.calculate_answer(this.entry);
+        if(answer)
+          this.entry = answer;
       },
 
       tap_delete: function(event){
@@ -180,6 +185,7 @@
           m = entry.match(substraction);
         }
 
+        this.$.focus.focus();
         return entry != this.entry ? entry : '';
       }
 
